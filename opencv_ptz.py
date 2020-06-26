@@ -3,12 +3,14 @@ import cv2
 import imutils
 
 
+#cap = cv2.VideoCapture("http://208.72.70.171:80/mjpg/video.mjpg")
 cap = cv2.VideoCapture(0)
 ret, frame = cap.read() # Initializing the video frame
 # setting width & height of the video frame
 width = frame.shape[1] 
 height = frame.shape[0]
 zoom = 1
+frame_center = (int(height/2), int(width/2))
 
 def nothing(x):
     pass
@@ -40,6 +42,31 @@ def Zoom(cv2Object, point, zoomSize):
     dx = point[0] - center[1]
     dy = point[1] - center[0]
 
+    if dx > 0:
+        dx = 0
+
+    if dy > 0:
+        dy = 0
+
+    scale = zoomSize - 1
+    scale = scale * -1
+
+    if dx < 0:
+        if zoomSize > 1:
+            if (frame_center[1] * scale) > dx:
+                dx = frame_center[1] * scale
+        
+        elif dx != 0:
+            dx = 0
+
+    if dy < 0:
+        if zoomSize > 1:
+            if (frame_center[0] * scale) > dy:
+                dy = frame_center[0] * scale
+        
+        elif dy != 0:
+            dy = 0
+
     cv2Object = imutils.translate(cv2Object, dx, dy)
     # The image/video frame is cropped to the center with a size of the original picture
     # image[y1:y2,x1:x2] is used to iterate and grab a portion of an image
@@ -69,6 +96,9 @@ while(True):
     y = cv2.getTrackbarPos('Y','frame')
 
     frame = Zoom(frame, (x, y), zoom)
+
+    # resize frame again
+    #frame = imutils.resize(frame, width=1280)
 
     # Display the resulting frame
     cv2.imshow('frame',frame)
