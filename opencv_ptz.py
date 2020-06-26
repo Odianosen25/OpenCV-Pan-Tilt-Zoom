@@ -8,9 +8,25 @@ ret, frame = cap.read() # Initializing the video frame
 # setting width & height of the video frame
 width = frame.shape[1] 
 height = frame.shape[0]
+zoom = 1
 
 def nothing(x):
     pass
+
+def zoom_changed_state(z):
+    global zoom
+    z = 1 if z <= 0 else z
+
+    # first get present state
+    x = cv2.getTrackbarPos('X','frame')
+    y = cv2.getTrackbarPos('Y','frame')
+
+    scale = z/zoom
+    x = int(x * scale)
+    y = int(y * scale)
+    cv2.setTrackbarPos('X','frame', x)
+    cv2.setTrackbarPos('Y','frame', y)
+    zoom = z
 
 def Zoom(cv2Object, point, zoomSize):
     # Resizes the image/video frame to the specified amount of "zoomSize".
@@ -24,8 +40,6 @@ def Zoom(cv2Object, point, zoomSize):
     dx = point[0] - center[1]
     dy = point[1] - center[0]
 
-    #print(dx, dy)
-
     cv2Object = imutils.translate(cv2Object, dx, dy)
     # The image/video frame is cropped to the center with a size of the original picture
     # image[y1:y2,x1:x2] is used to iterate and grab a portion of an image
@@ -38,21 +52,17 @@ def Zoom(cv2Object, point, zoomSize):
     return cv2Object
 
 cv2.namedWindow("frame")
-cv2.createTrackbar('Zoom','frame', 1, 10, nothing)
-cv2.createTrackbar('X','frame', 1, width, nothing)
-cv2.createTrackbar('Y','frame', 1, height, nothing)
+cv2.createTrackbar('Zoom','frame', 1, 10, zoom_changed_state)
+cv2.createTrackbar('X','frame', 1, width*2, nothing)
+cv2.createTrackbar('Y','frame', 1, height*2, nothing)
 
 while(True):
     # Capture frame-by-frame
     ret, frame = cap.read()
 
-    # Zooming in
-    #frame = imutils.resize(frame, width=1280) #doubling the width
-    #frame = frame[240:720,320:960]
     (h, w) = frame.shape[:2]
     #print(f"orignal {h} {w}")
 
-    zoom = cv2.getTrackbarPos('Zoom','frame')
     x = cv2.getTrackbarPos('X','frame')
     y = cv2.getTrackbarPos('Y','frame')
 
