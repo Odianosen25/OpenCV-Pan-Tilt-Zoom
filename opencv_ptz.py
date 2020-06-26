@@ -2,12 +2,12 @@ import numpy as np
 import cv2
 import imutils
 
+
 cap = cv2.VideoCapture(0)
 ret, frame = cap.read() # Initializing the video frame
 # setting width & height of the video frame
 width = frame.shape[1] 
 height = frame.shape[0]
-selected_point = None
 
 def nothing(x):
     pass
