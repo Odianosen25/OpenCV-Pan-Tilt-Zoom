@@ -10,22 +10,9 @@ ret, frame = cap.read() # Initializing the video frame
 width = frame.shape[1] 
 height = frame.shape[0]
 selected_point = None
-zoom = 1
 
 def nothing(x):
-    global zoom
-
-    if x <= 0:
-        x = 1
-        
-    zoom = int(x)
-    
-def click_and_crop(event, x, y, flags, param):
-
-    global selected_point
-
-    if event == cv2.EVENT_LBUTTONDOWN:
-        selected_point = (x, y)
+    pass
 
 def Zoom(cv2Object, point, zoomSize):
     # Resizes the image/video frame to the specified amount of "zoomSize".
@@ -56,8 +43,9 @@ def Zoom(cv2Object, point, zoomSize):
     return cv2Object
 
 cv2.namedWindow("frame")
-cv2.setMouseCallback("frame", click_and_crop)
 cv2.createTrackbar('Zoom','frame', 1, 10, nothing)
+cv2.createTrackbar('X','frame', 1, width, nothing)
+cv2.createTrackbar('Y','frame', 1, height, nothing)
 
 while(True):
     # Capture frame-by-frame
@@ -69,8 +57,11 @@ while(True):
     (h, w) = frame.shape[:2]
     #print(f"orignal {h} {w}")
 
-    if selected_point is not None:
-        frame = Zoom(frame, selected_point, zoom)
+    zoom = cv2.getTrackbarPos('Zoom','frame')
+    x = cv2.getTrackbarPos('X','frame')
+    y = cv2.getTrackbarPos('Y','frame')
+
+    frame = Zoom(frame, (x, y), zoom)
 
     # Display the resulting frame
     cv2.imshow('frame',frame)
