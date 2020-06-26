@@ -55,6 +55,8 @@ cv2.namedWindow("frame")
 cv2.createTrackbar('Zoom','frame', 1, 10, zoom_changed_state)
 cv2.createTrackbar('X','frame', 1, width*2, nothing)
 cv2.createTrackbar('Y','frame', 1, height*2, nothing)
+cv2.setTrackbarPos('X','frame', int(width/2))
+cv2.setTrackbarPos('Y','frame', int(height/2))
 
 while(True):
     # Capture frame-by-frame
