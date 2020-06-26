@@ -1,9 +1,7 @@
 import numpy as np
 import cv2
 import imutils
-'''
-This Zoom Program was written by: Carlos J. Flores of F.I.U.
-'''
+
 cap = cv2.VideoCapture(0)
 ret, frame = cap.read() # Initializing the video frame
 # setting width & height of the video frame
