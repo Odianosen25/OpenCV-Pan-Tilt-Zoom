@@ -76,6 +76,5 @@ while(True):
         break
 
 # Releasing the capture
-cv2.imwrite("CanvasTest12.png", frame)
 cap.release()
 cv2.destroyAllWindows()
