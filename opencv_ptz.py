@@ -21,9 +21,6 @@ def Zoom(cv2Object, point, zoomSize):
     # cropScale represents the top left corner of the cropped frame (y/x)
     cropScale = (int(center[0]/zoomSize), int(center[1]/zoomSize))
 
-    x = -50
-    y = -150
-
     dx = point[0] - center[1]
     dy = point[1] - center[0]
 
