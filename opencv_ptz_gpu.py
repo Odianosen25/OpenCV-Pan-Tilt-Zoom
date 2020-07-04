@@ -80,9 +80,11 @@ def Zoom(cv2Object, point, zoomSize, res):
     # The image/video frame is cropped to the center with a size of the original picture
     # image[y1:y2,x1:x2] is used to iterate and grab a portion of an image
     # (y1,x1) is the top left corner and (y2,x1) is the bottom right corner of new cropped frame.
-    cv2Object = cv2.UMat.get(cv2Object)
-    cv2Object = cv2Object[0:(center[0] + cropScale[0]), 0:(center[1] + cropScale[1])]
+    cx = int(center[1] + cropScale[1])
+    cy = int(center[0] + cropScale[0])
+    cv2Object = cv2.UMat(cv2Object, [0, cy], [0, cx])
     cv2Object = cv2.resize(cv2Object, (width, height), interpolation=cv2.INTER_AREA)
+    cv2Object = cv2.UMat.get(cv2Object)
 
     #print(h, w)
     return cv2Object
